@@ -9,7 +9,8 @@ import cors from "cors";
 const port = process.env.PORT || 5001;
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "10mb" })); // You can increase this to 20mb if needed
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(cookieParser());
 app.use(
   cors({
