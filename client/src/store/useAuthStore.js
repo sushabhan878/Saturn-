@@ -5,9 +5,9 @@ export const useAuthStore = create((set) => ({
   authUser: null,
   isSigningUp: false,
   isLoggingIn: false,
-  isLoggingOut: false,
   isUpdatingProfile: false,
   isCheckingAuth: true,
+  onlineUsers: [],
 
   // Check if user is authenticated or not
 
