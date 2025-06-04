@@ -21,7 +21,7 @@ app.use(
 
 // API Endpoints
 app.use("/api/auth", authRoute);
-app.use("/api/message", messageRoute);
+app.use("/api/messages", messageRoute);
 connectDB();
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
