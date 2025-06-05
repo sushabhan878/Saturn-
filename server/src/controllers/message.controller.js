@@ -21,18 +21,19 @@ export const getUsersForSidebar = async (req, res) => {
 export const getMessages = async (req, res) => {
   try {
     const { id: userToChatId } = req.params;
-    const senderId = req.user._id;
+    const myId = req.user._id;
 
     const messages = await Message.find({
       $or: [
-        { senderId: senderId, receiverId: userToChatId },
-        { senderId: userToChatId, receiverId: senderId },
+        { senderId: myId, receiverId: userToChatId },
+        { senderId: userToChatId, receiverId: myId },
       ],
     });
 
     res.status(200).json(messages);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    console.log("Error in getMessages controller: ", error.message);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -46,10 +47,9 @@ export const sendMessage = async (req, res) => {
 
     let imageUrl;
     if (image) {
-      const uploadeRespose = await cloudinary.uploader.upload(image, {
-        upload_preset: "chat_app",
-      });
-      imageUrl = uploadeRespose.secure_url;
+      // Upload base64 image to cloudinary
+      const uploadResponse = await cloudinary.uploader.upload(image);
+      imageUrl = uploadResponse.secure_url;
     }
 
     const newMessage = new Message({
@@ -65,6 +65,8 @@ export const sendMessage = async (req, res) => {
 
     res.status(200).json(newMessage);
   } catch (error) {
+    console.log("Error in sendMessage controller: ", error.message);
+
     res.status(500).json({ message: "Something went wrong" });
   }
 };
