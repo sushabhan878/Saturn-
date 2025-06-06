@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
 import cloudinary from "../lib/cloudinary.js";
+import { gerReceiverSocketId, io } from "../lib/socket.js";
 // All the registered users except the logged in user
 export const getUsersForSidebar = async (req, res) => {
   try {
@@ -62,6 +63,10 @@ export const sendMessage = async (req, res) => {
     await newMessage.save();
 
     // Realtime funceionality with the help of socket.io
+    const receiverSocketId = gerReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
 
     res.status(200).json(newMessage);
   } catch (error) {
