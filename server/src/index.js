@@ -8,13 +8,13 @@ import cors from "cors";
 import { app, server } from "./lib/socket.js";
 
 const port = process.env.PORT || 5001;
-
+const frontend_url = process.env.FRONTEND_URL;
 app.use(express.json({ limit: "10mb" })); // You can increase this to 20mb if needed
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: frontend_url,
     credentials: true,
   })
 );
